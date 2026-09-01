@@ -55,6 +55,18 @@ jar / submodule reference.)
   postinstall), and install `xdotool` in the container (needed by App window ops and
   Mouse input on the live desktop).
 
+### Dev-mode mount added (after spike, per user request)
+- `autobdd-test/docker-compose.yml` now binds `${AUTOBDD_SRC:-../AutoBDD}` over the
+  image's baked `/home/$USER/Projects/AutoBDD`, so autobdd-test exercises the **live
+  working-tree AutoBDD** instead of the stale image copy. Nested `${PWD}` test-project
+  mount keeps precedence. Verified: `docs/upgrade-plan.md` (phase-0-only) is visible
+  inside the container at the framework path — proof the mount is active.
+- **autobdd-test does not pass today** — the baked framework crashes on its own
+  (`myDISPLAYSIZE` undefined at `abdd_Linux_CH.js:100`), confirming the "worked 6 years
+  ago" claim is false as shipped. This is the baseline Phases 1–6 must fix.
+- The dev mount means autobdd-test will continuously test framework changes as we land
+  them, without rebuilding the image each iteration.
+
 **Goal:** Bring AutoBDD, autobdd-test, and AutoBDD-example back to a working state on a
 modern stack; upgrade every library and internal component (WebdriverIO, Docker/Ubuntu,
 Node.js, SikuliX→Oculix, Python, Selenium, reporting). The "worked 6 years ago with its
