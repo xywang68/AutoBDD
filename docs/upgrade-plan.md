@@ -56,16 +56,71 @@ jar / submodule reference.)
   Mouse input on the live desktop).
 
 ### Dev-mode mount added (after spike, per user request)
-- `autobdd-test/docker-compose.yml` now binds `${AUTOBDD_SRC:-../AutoBDD}` over the
+- 
   image's baked `/home/$USER/Projects/AutoBDD`, so autobdd-test exercises the **live
   working-tree AutoBDD** instead of the stale image copy. Nested `${PWD}` test-project
   mount keeps precedence. Verified: `docs/upgrade-plan.md` (phase-0-only) is visible
   inside the container at the framework path — proof the mount is active.
-- **autobdd-test does not pass today** — the baked framework crashes on its own
+- 
   (`myDISPLAYSIZE` undefined at `abdd_Linux_CH.js:100`), confirming the "worked 6 years
   ago" claim is false as shipped. This is the baseline Phases 1–6 must fix.
-- The dev mount means autobdd-test will continuously test framework changes as we land
-  them, without rebuilding the image each iteration.
+- 
+   them, without rebuilding the image each iteration.
+
+## 0b. Option A dev-loop — working state (2026-09-01)
+
+After the dev-mount, autobdd-test now runs the **live working-tree framework end-to-end
+and ALL 5 e2e specs PASS** (test_envs, test_images, test_vars, test_project_steps,
+test_ocr — Chrome 96 sessions, real scenarios, screenshots+OCR). This is the first
+proof that autobdd-test works against AutoBDD since the 6-year gap.
+
+### What it took (all committed to `phase-0` in AutoBDD + autobdd-test)
+
+**AutoBDD `package.json`** — Node-12-safe pins (the image runs Node 12.22.7, and the
+original `>=`/`^` ranges had drifted to modern packages with Node-14+ syntax that
+crashed the wdio worker with `SyntaxError`):
+- `glob` `>=7.1.7` → `^7.2.3` (had resolved to 13.0.6)
+- `pdf-parse` `>=1.1.1` → `^1.1.1` (had resolved to 2.4.5)
+- `@wdio/*` `^7.7.7` → `7.7.7` (latest 7.x = 7.40.0 needs Node 14+)
+- added `inquirer: 8.2.6` (dedupes the Node-18 `@inquirer/external-editor` that
+  `@wdio/cli`'s `inquirer ^8` pulled) + `overrides` for npm 8+ users
+- **`fibers` must be built** in the container (`cd node_modules/fibers && node-gyp
+  rebuild`) — no prebuilt binary for Node 12; without it the worker dies silently on
+  `@wdio/sync` (this is why wdio 7 sync is being dropped in the wdio 9 upgrade)
+
+**AutoBDD `framework/configs/abdd_Linux_CH.js`** — Chrome 96 launch fix:
+- removed the hand-written `Default/Preferences` JSON file (crashed Chrome 96's
+  chromedriver with `cannot parse internal JSON template` → `DevToolsActivePort file
+  doesn't exist`). Replaced with the `goog:chromeOptions.prefs` capability (already
+  commented-out in the file) so Chrome generates its own valid Preferences.
+
+**autobdd-test**:
+- `e2e-test/support/steps/when.js`: legacy `require('cucumber')` → `@cucumber/cucumber`
+  (wdio 7 bundles cucumber 7)
+- `docker-compose.yml`: bind-mount patched `dev/*.startup.sh` over the image's baked
+  scripts; they skip the node_modules refresh when `AUTOBDD_DEV_MOUNT=1` (else the image's
+  wdio-6 node_modules clobbers the mounted wdio-7 set)
+- `Makefile`: `export USER/HOSTOS/USERID/GROUPID/PASSWORD` (compose can't shell-expand
+  these in `.env`); `.env` slimmed to static vars only
+- selenium-standalone drivers installed under the mounted tree:
+  `node_modules/selenium-standalone/.selenium/{chromedriver/96.0.4664.45-x64,
+  geckodriver/0.26.0-x64, selenium-server/3.141.59}` + `chromeDriverVersion=96.0.4664.45`
+
+### Known dev-loop gotchas (to fix properly in Phases 1–6)
+1. **`npm install` wipes the selenium drivers** (they live in `.selenium/` under
+   node_modules). After any reinstall you must re-run
+   `selenium-standalone install` (chrome + firefox) and rebuild fibers. A dev bootstrap
+   script should automate this.
+2. The `python2` 404 errors during startup are from `.abdd_startup.sh` →
+   `/root/enable_python2_support.sh` (repo purged python2.7). Non-fatal noise; remove in
+   Phase 1 (python2 already slated for removal).
+3. `skipSeleniumInstall: true` in the config means wdio won't self-install drivers — the
+   manual install above is required. Selenium 4 upgrade (Phase 0.5/5) uses driver manager.
+4. Node 12 + fibers is the fragile legacy foundation — this whole Option A path is a
+   stopgap. The wdio 9 upgrade (Phase 4) removes fibers, `@wdio/sync`, and the Node-12
+   syntax constraints entirely.
+
+### Status: Option A done — dev loop proves autobdd-test ↔ AutoBDD working
 
 **Goal:** Bring AutoBDD, autobdd-test, and AutoBDD-example back to a working state on a
 modern stack; upgrade every library and internal component (WebdriverIO, Docker/Ubuntu,
