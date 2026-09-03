@@ -25,8 +25,9 @@ module.exports = (element, falseCase, expectedClassName) => {
      * List of all the classes of the element
      * @type {Array}
      */
-    const classesList = browser.$(parsedElement).getAttribute('className');
-    console.log(classesList)
+    // getAttribute('class') is null when the element has no class attribute at all;
+    // treat that as "no classes" so 'does not have' assertions pass.
+    const classesList = browser.$(parsedElement).getAttribute('class') || '';
 
     if (falseCase === 'does not have') {
         expect(classesList).not.toContain(
