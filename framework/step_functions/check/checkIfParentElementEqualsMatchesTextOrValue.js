@@ -41,7 +41,8 @@ const checkElement = (parentElement, childElement, falseCase, action, targetType
 
     if (['existing', 'displayed', 'visible', 'enabled', 'clickable', 'focused', 'selected', 'checked'].includes(action)) {
         var checkAction = `is${action.charAt(0).toUpperCase()}${action.slice(1)}`;
-        if (checkAction == 'isVisible') checkAction = 'isDisplayedInViewport';
+        // "is visible" = CSS-visible (isDisplayed), not in-viewport
+        if (checkAction == 'isVisible') checkAction = 'isDisplayed';
         if (checkAction == 'isChecked') checkAction = 'isSelected';
         const myResult = typeof(parentElement) != 'undefined' && parentElement.isExisting() && parentElement[checkAction]();
         expect(myResult).toBe(!falseCase, `Failed expectation: the parent element "${parentElement}" that contains the childelement "${childElement}" is ${falseCase} ${action}`);    
