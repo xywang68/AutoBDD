@@ -204,7 +204,7 @@ autobdd-test / AutoBDD-example                   ← separate repos, pull xyteam
 | WebdriverIO | 7.7.7 (sync) | 9.30.x (async) | dominant migration effort |
 | Node.js (Docker) | 14 (EOL) | 20 LTS (or 22 LTS) | wdio v9 needs ≥18.20/≥20.9 |
 | Ubuntu base | 20.04 (EOL) | 22.04 LTS | rdesktop dropped in 24.04; prefer 22.04 unless 24.04 verified |
-| Python | 3.8 | 3.10+ (3.12) | autorunner.py already py3-clean |
+| Python | 3.8 | 3.10+ (3.12) | auto-runner.py already py3-clean |
 | Selenium | 3.141.59 | 4.x + current drivers | selenium-standalone service |
 | SikuliX bridge | xysikulixapi → sikulixapi-2.0.4.jar (via node-java) | xysikulixapi → **oculixapi-4.0.0.jar** (via node-java-bridge) | namespace preserved |
 | Java bridge | `java` (node-java, broken) | `node-java-bridge` (Rust/napi, prebuilt) | resolves the top blocker |
@@ -313,8 +313,8 @@ the new image (both real display and xvfb).
 - **5.1** `wdio-cucumberjs-json-reporter` v6 config keys; `multiple-cucumber-html-reporter`
   v3 (or replacement) parsing cucumber v10/wdio v9 JSON.
 - **5.2** Re-verify `scripts/{gen-report,generate-reports,testrail-reports}.js`,
-  `parseARunnerLog.js`, `autorunner.py` (tagExpression→tags translation).
-- **5.3** Python tooling: bump per Phase 1; smoke autorunner dry-run + parallel run.
+  `parse-single-runner-log.js`, `auto-runner.py` (tagExpression→tags translation).
+- **5.3** Python tooling: bump per Phase 1; smoke auto-runner dry-run + parallel run.
 
 **Gate 6:** full HTML report with step screenshots + movie generated from a real run.
 

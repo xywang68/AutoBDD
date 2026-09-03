@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-Type python autorunner.py --help for more information
+Type python auto-runner.py --help for more information
 '''
 
 import sys
@@ -27,7 +27,7 @@ def parse_arguments():
     '''
     descript = "This python scripts can be used to run abdd/maven in parallel and generate cucumber report. "
     descript += "Command Example: "
-    descript += " framework/scripts/autorunner.py --parallel 2 --movie 0"
+    descript += " framework/scripts/auto-runner.py --parallel 2 --movie 0"
     descript += " --platform Linux --browser CH"
     descript += " --projectbase test-projects --project webtest-example"
     descript += " --modulelist test-webpage test-download --reportbase ~/Run/reports"
@@ -480,7 +480,7 @@ class AbddAutoRun:
         return result
 
     def create_dryrun_json(self):
-        from autorunner_dryrun import AbddDryRun
+        from auto_runner_dryrun import AbddDryRun
         dry_run = AbddDryRun(self.projectbase, self.project,
                                 self.modulelist, self.platform, self.browser,
                                 self.cucumberjs_dryrun_args, self.report_full_path)

@@ -18,7 +18,7 @@ do
     RUN_ARGS="$RUN_ARGS $element"
 done
 
-REPORTDIR=${REPORTDIR:-arunner-report}
+REPORTDIR=${REPORTDIR:-single-runner-report}
 MODULEDIR=$(pwd | awk -F 'e2e-test/' '{print $2}')
 mkdir -p ${REPORTDIR}/${MODULEDIR}
 if [[ "$CLEANOLDREPORT" == "1" ]]; then
@@ -26,10 +26,10 @@ if [[ "$CLEANOLDREPORT" == "1" ]]; then
 fi
 
 echo REPORTDIR=${REPORTDIR} $RUN_CMD $RUN_ARGS
-time REPORTDIR=${REPORTDIR} $RUN_CMD $RUN_ARGS | tee ${REPORTDIR}/${MODULEDIR}/arunner.log
+time REPORTDIR=${REPORTDIR} $RUN_CMD $RUN_ARGS | tee ${REPORTDIR}/${MODULEDIR}/single-runner.log
 
 # gen report
 cd ${REPORTDIR}
-parseARunnerLog.js
+parse-single-runner-log.js
 gen-report.js
 cd -

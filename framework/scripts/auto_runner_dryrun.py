@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-Type python autorunner_dryrun.py --help for more information
+Type python auto_runner_dryrun.py --help for more information
 '''
 import argparse
 import json
