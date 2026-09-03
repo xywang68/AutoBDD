@@ -67,8 +67,9 @@ module.exports = (waitMs, action, type, element, ifExists) => {
         browser.$(targetElement).scrollIntoView();
         checkCondition('some', targetElement, 'becomes', null, 'visible');
         if (action == 'double click') {
-            const doubleClick = function(argument) { $(argument).dblclick() };
-            browser.execute(doubleClick, targetElement);
+            // use wdio's native doubleClick; the old jQuery $(el).dblclick()
+            // required the page to load jQuery and threw '$ is not defined'
+            browser.$(targetElement).doubleClick();
         } else {
             browser.$(targetElement)[method](options);
         }    
