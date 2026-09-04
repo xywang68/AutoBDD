@@ -1,4 +1,11 @@
 
+> **Current baseline (phase-0, v3.0.0):** The four repos are aligned on **3.0.0** —
+> AutoBDD framework (`package.json` `3.0.0` + docker image `xyteam/autobdd:3.0.0`),
+> AutoBDD-example, autobdd-test, and xySikulixApi — verified to work together on this
+> version. The test repos' `.env` `AutoBDD_Ver=3.0.0` selects the matching image
+> (previously the stale `2.3.0` tag). This v3.0.0 set is the base going forward; the
+> upgrade plan below targets the later dependency-upgrade work.
+
 ---
 
 ## 0. Phase 0 Spike — results (2026-09-01)
