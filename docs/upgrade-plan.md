@@ -251,6 +251,12 @@ launches, and an Oculix `find` on a sample image returns a match.
 
 ### Phase 1 — Repo consolidation: single AutoBDD monorepo (dominant topology change)
 
+> **Status: DONE (2026-09-05).** autobdd-test folded into `test-projects/autobdd-test` as
+> the internal test suite; xySikulixApi vendored into `third_party/xysikulixapi` and
+> consumed via a `file:` dependency. Verified: `make e2e-test` passes against the baked
+> `xyteam/autobdd:3.0.0` image (all runners, exit 0). AutoBDD is self-contained (no
+> external `xysikulixapi`/`autobdd-test` deps).
+
 Reduce the four aligned repos to **one** (AutoBDD) plus one external demo
 (AutoBDD-example).
 
