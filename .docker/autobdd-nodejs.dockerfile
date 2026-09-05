@@ -3,6 +3,15 @@ FROM xyteam/autobdd-ubuntu:${AUTOBDD_VERSION}
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 
+# NOTE: This stage is NOT rebuilt for 3.0.0. phase-0 (wdio7) only drives Chrome <= 97,
+# and Google purged Chrome <= 114 .debs from its apt repo, so a from-scratch build here
+# yields Chrome 152 (stable) which wdio7 cannot drive. The released autobdd:3.0.0 is
+# instead built ON the pre-existing xyteam/autobdd-nodejs:2.3.0 base (Node 12.22.7 +
+# Chrome 96), which is the exact runtime phase-0 wdio7 was verified against. That base
+# image carries this stage's output from when 2.3.0 was built (setup_12.x era), so it is
+# the source of truth for the Node/Chrome runtime. See autobdd-image.dockerfile: build
+# the autobdd layer with `--build-arg AUTOBDD_VERSION=2.3.0`.
+
 # apt set keys for additional packages
 RUN \
     # set apt-key for nodejs 14.x. 16.x breaks fiber, avoid unil fiber provides fix
