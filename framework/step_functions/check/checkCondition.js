@@ -11,7 +11,10 @@ module.exports = (partOf, element, verb, falseCase, state) => {
     const myElem = parseExpectedText(element);
     const myPartOf = partOf || 'some';
     var checkAction = `is${state.charAt(0).toUpperCase()}${state.slice(1)}`;
-    if (checkAction == 'isVisible') checkAction = 'isDisplayedInViewport';
+    // "is visible" means CSS-visible (not hidden), not necessarily within the
+    // current scroll viewport - use isDisplayed() so an off-screen but shown
+    // element is still 'visible'.
+    if (checkAction == 'isVisible') checkAction = 'isDisplayed';
     if (checkAction == 'isChecked') checkAction = 'isSelected';
     var myResult;
     if (verb.includes('become')) {

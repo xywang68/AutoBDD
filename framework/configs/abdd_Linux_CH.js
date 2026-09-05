@@ -23,10 +23,6 @@ const myParallelRunPort = 4444 + parseInt(process.env.DISPLAY.slice(-3).replace(
 // for Linux chrome
 const myChromeProfilePath = safeQuote(process.env.myChromeProfilePath) || '/tmp/chrome_profile_' + process.env.DISPLAY.substr(1);
 fs.existsSync(myChromeProfilePath) || fs.mkdirSync(myChromeProfilePath);
-const myPreference_json = `{"download":{"default_directory":"${myDownloadPathLocal}","directory_upgrade":true},"savefile":{"default_directory":"${myDownloadPathLocal}"}}`;
-fs.existsSync(myChromeProfilePath) || fs.mkdirSync(myChromeProfilePath);
-fs.existsSync(myChromeProfilePath + '/Default') || fs.mkdirSync(myChromeProfilePath + '/Default');
-fs.writeFileSync(myChromeProfilePath + '/Default/Preferences', myPreference_json);
 process.env.debugX = safeQuote(process.env.debugX) || 1;
 
 // const myBrowserProxySetting = (process.env.http_proxy) ? "--proxy-server=" + process.env.http_proxy : "--no-proxy-server";
@@ -109,19 +105,19 @@ exports.config = {
                 '--disable-dev-shm-usage',
                 '--ignore-certificate-errors'
             ],
-            // prefs: {
-            //   'credentials_enable_service': false,
-            //   'profile': {
-            //     'password_manager_enabled': false
-            //   },
-            //   'download': {
-            //     'default_directory': myDownloadPathLocal,
-            //     'directory_upgrade': true
-            //   },
-            //   'savefile': {
-            //     'default_directory': myDownloadPathLocal
-            //   }
-            // }
+            prefs: {
+              'credentials_enable_service': false,
+              'profile': {
+                'password_manager_enabled': false
+              },
+              'download': {
+                'default_directory': myDownloadPathLocal,
+                'directory_upgrade': true
+              },
+              'savefile': {
+                'default_directory': myDownloadPathLocal
+              }
+            }
         },
         port: myParallelRunPort
       }

@@ -1,4 +1,12 @@
-#### AutoBDD v2: converted to webdriverio
+> **Version (v3.0):** This is **AutoBDD v3.0** (`package.json` `3.0.0`, docker image
+> `xyteam/autobdd:3.0.0`). v3.0 is the aligned baseline for the four-repo project
+> set and is verified to keep **AutoBDD working together with the
+> [AutoBDD-example](https://github.com/xyteam/AutoBDD-example) and
+> [autobdd-test](https://github.com/xyteam/autobdd-test) repos** (and xySikulixApi) —
+> all on v3.0. This v3.0 set is the base going forward; a future effort consolidates
+> these repos and upgrades dependencies together.
+
+#### AutoBDD v3: converted to webdriverio (wdio 7 on Node 12)
 
 #### TLDR:
 
@@ -10,7 +18,7 @@ docker-compose run --rm autobdd-example-run "--parallel=4 --screenshot=3 --movie
 
 google-chrome ~/Projects/AutoBDD-example/test-results/test1/index.html
 ```
-## AutoBDD (v2)
+## AutoBDD (v3)
 
   BDD Automation Framework
 
@@ -78,9 +86,9 @@ google-chrome ~/Projects/AutoBDD-example/test-results/test1/index.html
     
       * pre-canned runner control -- runner can be controlled with 2 simple docker-compose commands (up and down)
   
-  * Popular 3rd Party Libraries
+    * Popular 3rd Party Libraries
   
-    * webdriverio (v6)
+    * webdriverio (v7, on Node 12)
   
     * cucumber-js (v6)
   

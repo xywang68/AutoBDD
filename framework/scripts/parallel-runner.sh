@@ -6,7 +6,7 @@ RUN_OPTS=""
 JOBS_COUNT=""
 ABDD_PROJECT=$(pwd | sed 's/.*test-projects\///' | sed 's/\/.*//')
 MODULEDIR=$(pwd | awk -F 'e2e-test/' '{print $2}')
-REPORTDIR=${REPORTDIR:-prunner-report}
+REPORTDIR=${REPORTDIR:-parallel-runner-report}
 
 while (( "$#" )); do
   case "$1" in
@@ -70,7 +70,7 @@ if [[ "${JOBS_COUNT}" == "" ]]; then JOBS_COUNT=${CPU_COUNT}; fi
 if [[ "${JOBS_COUNT}" == *"/"* ]]; then JOBS_COUNT=`expr ${CPU_COUNT} \* ${JOBS_COUNT/\// \/ }`; fi
 if [[ "${JOBS_COUNT}" == *"-"* ]]; then JOBS_COUNT=`expr ${CPU_COUNT} ${JOBS_COUNT/-/ \- }`; fi
 if [[ "${JOBS_COUNT}" == *"-"* ]] || [[ "${JOBS_COUNT}" == "0" ]]; then JOBS_COUNT=1; fi
-REPORTDIR=${REPORTDIR:-prunner-report}
+REPORTDIR=${REPORTDIR:-parallel-runner-report}
 mkdir -p ${REPORTDIR}
 if [[ "$CLEANOLDREPORT" == "1" ]]; then
     rm -rf ${REPORTDIR}/*
@@ -90,6 +90,6 @@ time REPORTDIR=${REPORTDIR} parallel --jobs=${JOBS_COUNT} --results=${REPORTDIR}
 
 # gen report
 cd ${REPORTDIR}
-parsePRunnerLog.js
+parse-parallel-runner-log.js
 gen-report.js
 cd -

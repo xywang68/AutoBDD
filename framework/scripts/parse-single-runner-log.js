@@ -58,4 +58,4 @@ const parseLog = (logFilePath) => {
 }
 
 // script action starts here
-glob.sync('**/arunner.log').forEach(f => {parseLog(f)});
+glob.sync('**/single-runner.log').forEach(f => {parseLog(f)});

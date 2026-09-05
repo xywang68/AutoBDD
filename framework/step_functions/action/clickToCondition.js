@@ -11,7 +11,8 @@ module.exports = (clickElement, clickCount, checkElement, falseCase, state) => {
     var myState = state || 'existing';
     // convert conditions
     var checkAction = `is${myState.charAt(0).toUpperCase()}${myState.slice(1)}`;
-    if (checkAction == 'isVisible') checkAction = 'isDisplayedInViewport';
+    // "is visible" = CSS-visible (isDisplayed), not in-viewport
+    if (checkAction == 'isVisible') checkAction = 'isDisplayed';
     if (checkAction == 'isChecked') checkAction = 'isSelected';
     var keepGoing = true;
     do {

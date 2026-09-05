@@ -41,7 +41,10 @@ const checkElement = (targetElementIdElement, targetElementIndex, targetElement,
 
     if (['existing', 'displayed', 'visible', 'enabled', 'clickable', 'focused', 'selected', 'checked'].includes(action)) {
         var checkAction = `is${action.charAt(0).toUpperCase()}${action.slice(1)}`;
-        if (checkAction == 'isVisible') checkAction = 'isDisplayedInViewport';
+        // "is visible" means CSS-visible (not hidden), not necessarily within the
+        // current scroll viewport - use isDisplayed() so an off-screen but shown
+        // element is still 'visible'.
+        if (checkAction == 'isVisible') checkAction = 'isDisplayed';
         if (checkAction == 'isChecked') checkAction = 'isSelected';
         const myResult = typeof(targetElementIdElement) != 'undefined' && targetElementIdElement.isExisting() && targetElementIdElement[checkAction]();
         expect(myResult).toBe(!falseCase, `Failed expectation: the ${targetElementIndex} target element "${targetElement}" inside the ${parentElementIndex} parent element "${parentElement}" is ${falseCase} ${action}`);    
